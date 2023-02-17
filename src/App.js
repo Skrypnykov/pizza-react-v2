@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header, Categories, Sort, PizzaBlock } from './components';
 
+import pizzas from './assets/pizzas.json';
 
 function App() {
   return (
@@ -13,11 +14,14 @@ function App() {
               <Categories />
               <Sort />
             </div>
-
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-              <PizzaBlock title="Мексиканская" price={150} />
-              <PizzaBlock title="Пеперони" price={130} />
+              {pizzas.map((obj) => (
+                <PizzaBlock
+                  key={obj.id}
+                  {...obj}
+                />
+              ))}
             </div>
           </div>
         </div>
