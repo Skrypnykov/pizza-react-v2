@@ -4,7 +4,7 @@ function Sort() {
   const [isVisible, setIsVisible] = React.useState(false);
   const [selected, setSelected] = React.useState(0);
 
-  const list = ['популярности', 'цене', 'алфавиту'];
+  const list = ['популярністю', 'ціною', 'алфавітом'];
   const sortName = list[selected];
 
   const onClickItem = (i) => {
@@ -27,7 +27,7 @@ function Sort() {
             fill="#2C2C2C"
           />
         </svg>
-        <b>Сортировка по:</b>
+        <b>Сортування за:</b>
         <span onClick={() => setIsVisible(!isVisible)}>{sortName}</span>
       </div>
       {isVisible && (
