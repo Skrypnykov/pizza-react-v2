@@ -1,7 +1,7 @@
 import React from 'react';
 import { Categories, Sort, PizzaBlock, Skeleton } from '../components';
 
-const  Home = () => {
+const Home = () => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -12,11 +12,11 @@ const  Home = () => {
         setItems(arr);
         setIsLoading(false);
       });
+      window.scrollTo(0, 0);
   }, []);
 
   return (
-    <>
-      {' '}
+    <div className="container">
       <div className="content__top">
         <Categories />
         <Sort />
@@ -27,8 +27,8 @@ const  Home = () => {
           ? [...new Array(12)].map((_, i) => <Skeleton key={i} />)
           : items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
       </div>
-    </>
+    </div>
   );
-}
+};
 
 export default Home;
