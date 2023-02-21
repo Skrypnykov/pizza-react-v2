@@ -91,8 +91,8 @@ const Cart = () => {
               />
             </div>
             <div className="cart__item-info">
-              <h3>Сырный цыпленок</h3>
-              <p>тонкое тесто, 26 см.</p>
+            <h3>Кисло-солодке курча</h3>
+              <p>тонке тісто, 26 см</p>
             </div>
             <div className="cart__item-count">
               <div className="button button--outline button--circle cart__item-count-minus">
@@ -167,8 +167,8 @@ const Cart = () => {
               />
             </div>
             <div className="cart__item-info">
-              <h3>Сырный цыпленок</h3>
-              <p>тонкое тесто, 26 см.</p>
+              <h3>Кисло-солодке курча</h3>
+              <p>тонке тісто, 26 см</p>
             </div>
             <div className="cart__item-count">
               <div className="button button--outline button--circle cart__item-count-minus">
