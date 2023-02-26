@@ -1,10 +1,32 @@
 import React from 'react';
-import { SearchContext } from '../../App';
+import debounce from 'lodash.debounce';
 
 import styles from './Search.module.scss';
 
+import { SearchContext } from '../../App';
+
 const Search = () => {
-  const { searchValue, setSearchValue } = React.useContext(SearchContext);
+  const [value, setValue] = React.useState('');
+  const { setSearchValue } = React.useContext(SearchContext);
+  const inputRef = React.useRef();
+
+  const onClickClear = () => {
+    setSearchValue('');
+    setValue('');
+    inputRef.current.focus();
+  };
+
+  const updateSearchValue = React.useCallback(
+    debounce((str) => {
+      setSearchValue(str);
+    }, 1000),
+    [],
+  );
+
+  const onChangeInput = (event) => {
+    setValue(event.target.value);
+    updateSearchValue(event.target.value);
+  };
 
   return (
     <div className={styles.root}>
@@ -43,16 +65,15 @@ const Search = () => {
         />
       </svg>
       <input
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
+        ref={inputRef}
+        value={value}
+        onChange={onChangeInput}
         className={styles.input}
         placeholder="Пошук піц..."
       />
-      {searchValue && (
+      {value && (
         <svg
-          onClick={() => {
-            setSearchValue('');
-          }}
+          onClick={onClickClear}
           className={styles.clearIcon}
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
