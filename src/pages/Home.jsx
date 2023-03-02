@@ -6,8 +6,8 @@ import { SearchContext } from '../App';
 import { Categories, Sort, sortList, PizzaBlock, Skeleton, Pagination } from '../components';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPizzas } from '../redux/slices/pizzaSlice';
-import { setCategory, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { selectFilter, setCategory, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -15,8 +15,8 @@ const Home = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const { items, status } = useSelector((state) => state.pizza);
-  const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
+  const { items, status } = useSelector(selectPizzaData);
+  const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
   const sortType = sort.sortProperty;
 
   const onClickCategory = (id) => {
@@ -44,8 +44,6 @@ const Home = () => {
 
     window.scrollTo(0, 0);
   };
-
-  const { searchValue } = React.useContext(SearchContext);
 
   // Если изменили параметры и был первый рендер
   React.useEffect(() => {
