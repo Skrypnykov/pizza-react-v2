@@ -20,7 +20,26 @@ body {
 .content {
   padding: 40px 0;
 
-  @media (max-width: 560px){
+  &__error-info {
+    margin: 100px auto;
+    width: 500px;
+    text-align: center;
+
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 145.4%;
+      letter-spacing: 0.01em;
+      color: #777777;
+    }
+  }
+
+  @media (max-width: 560px) {
     padding: 20px 0;
   }
 
@@ -29,7 +48,7 @@ body {
     font-size: 35px;
     font-weight: 700;
 
-    @media (max-width: 560px){
+    @media (max-width: 560px) {
       text-align: center;
     }
   }
