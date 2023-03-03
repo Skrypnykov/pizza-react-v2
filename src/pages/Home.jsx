@@ -2,7 +2,6 @@ import React from 'react';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
-import { SearchContext } from '../App';
 import { Categories, Sort, sortList, PizzaBlock, Skeleton, Pagination } from '../components';
 
 import { useSelector, useDispatch } from 'react-redux';

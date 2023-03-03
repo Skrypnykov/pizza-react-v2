@@ -7,12 +7,12 @@
   @media (max-width: 1076px) {
     padding: 20px 0;
   }
-  
+
   .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     @media (max-width: 1076px) {
       flex-direction: column;
     }
@@ -26,7 +26,7 @@
 
   &__logo {
     display: flex;
-    
+
     @media (max-width: 325px) {
       flex-direction: column;
       align-items: center;
