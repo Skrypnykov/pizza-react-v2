@@ -2,27 +2,41 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSort, setSort } from '../redux/slices/filterSlice';
 
-export const sortList = [
+type SortItem = {
+  name: string;
+  sortProperty: string;
+};
+
+// type SortPopupProps = {
+//   value: SortType;
+// };
+
+type PopupClick = MouseEvent & {
+  path: Node[];
+};
+
+export const sortList: SortItem[] = [
   { name: 'популярністю', sortProperty: 'rating' },
   { name: 'ціною', sortProperty: 'price' },
   { name: 'алфавітом', sortProperty: 'name' },
 ];
 
-export const Sort = React.memo(({ value }) => {
+export const Sort: React.FC = () => {
   const dispatch = useDispatch();
   const sort = useSelector(selectSort);
-  const sortRef = React.useRef();
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
   const [isVisible, setIsVisible] = React.useState(false);
 
-  const onClickListItem = (obj) => {
+  const onClickListItem = (obj: SortItem) => {
     dispatch(setSort(obj));
     setIsVisible(false);
   };
 
   React.useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.composedPath().includes(sortRef.current)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      const _event = event as PopupClick;
+      if (sortRef.current && !_event.composedPath().includes(sortRef.current)) {
         setIsVisible(false);
       }
     };
@@ -67,4 +81,4 @@ export const Sort = React.memo(({ value }) => {
       )}
     </div>
   );
-});
+};

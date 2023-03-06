@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 
-const FullPizza: React.FC = () => {
+export const FullPizza: React.FC = () => {
   const [pizza, setPizza] = React.useState<{
     imageUrl: string;
     name: string;
@@ -39,7 +39,7 @@ const FullPizza: React.FC = () => {
     <div className="container">
       <img className="pizza-block__image" src={pizza.imageUrl} />
       <h4 className="pizza-block__title">{pizza.name}</h4>
-      <div className="pizza-block__price">{pizza.price} ₴</div>
+      <div className="pizza-block__price">Ціна від {pizza.price} ₴</div>
       <br />
       <Link to="/">
         <button className="button button--outline button--add">
@@ -49,5 +49,3 @@ const FullPizza: React.FC = () => {
     </div>
   );
 };
-
-export default FullPizza;
