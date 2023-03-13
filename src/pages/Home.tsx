@@ -24,9 +24,9 @@ export const Home: React.FC = () => {
   const { items, status } = useSelector(selectPizzaData);
   const { searchValue, categoryId, currentPage, sortBy } = useSelector(selectFilter);
 
-  const onClickCategory = (idx: number) => {
+  const onClickCategory = React.useCallback((idx: number) => {
     dispatch(setCategory(idx));
-  };
+  }, []);
 
   const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -97,7 +97,7 @@ export const Home: React.FC = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onClickCategory={onClickCategory} />
-        <SortPopup />
+        <SortPopup value={sortBy} />
       </div>
       <h2 className="content__title">Усі піци</h2>
       {status === 'error' ? (
