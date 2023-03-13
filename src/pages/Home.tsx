@@ -2,22 +2,27 @@ import React from 'react';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
-import { Categories, Sort, PizzaBlock, Skeleton, Pagination } from '../components';
+import { Categories, SortPopup, PizzaBlock, Skeleton, Pagination } from '../components';
 import { sortList } from '../components/Sort';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
-import { selectFilter, setCategory, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { useSelector } from 'react-redux';
+import { fetchPizzas, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
+import {
+  selectFilter,
+  setCategory,
+  setCurrentPage,
+  setFilters,
+  SortPropertyEnum,
+} from '../redux/slices/filterSlice';
+import { useAppDispatch } from '../redux/store';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const isSearch = React.useRef(false);
+  const dispatch = useAppDispatch();
   const isMounted = React.useRef(false);
 
   const { items, status } = useSelector(selectPizzaData);
-  const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
-  const sortType = sort.sortProperty;
+  const { searchValue, categoryId, currentPage, sortBy } = useSelector(selectFilter);
 
   const onClickCategory = (idx: number) => {
     dispatch(setCategory(idx));
@@ -27,18 +32,17 @@ export const Home: React.FC = () => {
     dispatch(setCurrentPage(page));
   };
 
-  const getPizzas = async () => {
+  const getPizzas = () => {
     const category = categoryId > 0 ? `&category=${categoryId}` : '';
-    const order = sortType === 'rating' ? 'desc' : 'asc';
+    const order = sortBy.sortProperty === SortPropertyEnum.RATING ? 'desc' : 'asc';
     const search = searchValue ? `&search=${searchValue}` : '';
 
     dispatch(
-      // @ts-ignore
       fetchPizzas({
-        category,
+        sortBy,
         order,
+        categoryId: category,
         search,
-        sortType,
         currentPage,
       }),
     );
@@ -46,38 +50,45 @@ export const Home: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
-  // Если изменили параметры и был первый рендер
+  /////// Если изменили параметры и был первый рендер
   React.useEffect(() => {
     if (isMounted.current) {
-      const queryString = qs.stringify({
+      const params = {
         page: currentPage,
         category: categoryId,
-        sortBy: sortType,
-      });
+        sortBy: sortBy.sortProperty,
+      };
+      const queryString = qs.stringify(params);
       navigate(`?${queryString}`);
     }
     isMounted.current = true;
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [searchValue, categoryId, currentPage, sortBy.sortProperty]);
 
-  // Если был первый рендер, то проверяем URL-параметры и сохраняем в redux
+  // Если был первый рендер, то проверяем URL-параметр navigateы и сохраняем в redux
   React.useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sort = sortList.find((obj) => obj.sortProperty === params.sortBy);
+      const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams;
+      const sort = sortList.find((obj) => obj.sortProperty === sortBy.sortProperty);
+
+      console.log(window.location.search);
+      console.log(params);
+
       dispatch(
         setFilters({
-          ...params,
-          sort,
+          searchValue: searchValue,
+          categoryId: Number(categoryId),
+          currentPage: currentPage,
+          sortBy: sort || sortList[0],
         }),
       );
-      isSearch.current = true;
+      isMounted.current = true;
     }
   }, []);
 
   // Если был первый рендер, то запрашиваем пиццы
   React.useEffect(() => {
     getPizzas();
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [searchValue, categoryId, currentPage, sortBy.sortProperty]);
 
   const pizzas = items.map((obj: any) => <PizzaBlock key={obj.id} {...obj} />);
   const skeletons = [...new Array(12)].map((_, i) => <Skeleton key={i} />);
@@ -86,7 +97,7 @@ export const Home: React.FC = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onClickCategory={onClickCategory} />
-        <Sort />
+        <SortPopup />
       </div>
       <h2 className="content__title">Усі піци</h2>
       {status === 'error' ? (
